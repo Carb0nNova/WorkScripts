@@ -1,8 +1,11 @@
 #!/bin/bash
+#The purpose of this script is to run through a list of hostnames or IPs and determine the version of the DRAC.
 
+#Declaring variables
 declare -a HOSTLIST
 DRACUSER="root"
 
+#Basic help
 show_help(){
       echo " "
       echo "-f : Specify the file containing all hostnames/IPs"
@@ -17,7 +20,7 @@ show_help(){
       exit 0
 }
 
-
+#Parsing switches
 while getopts ":f:p:u:h" opt; do
   case $opt in
     f) FILENAME=$OPTARG
@@ -40,7 +43,7 @@ while getopts ":f:p:u:h" opt; do
   esac
 done
 
-
+#Reading from the hostlist
 if [[ -f $FILENAME ]]; then
   let i=0
   while read -r FILENAME; do
@@ -52,13 +55,14 @@ else
   exit 1
 fi
 
+#Determining if the argument provided is a file or an actual password
 if [[ -f $DRACPASS ]]; then
   PASSSW="-f"
 else
   PASSSW="-p"
 fi
 
-
+#Executing the getversion command on each host
 for i in "${HOSTLIST[@]}"
 do
 	echo "$i " && sshpass $PASSSW $DRACPASS ssh -o StrictHostKeyChecking=no $DRACUSER@$i racadm getversion
