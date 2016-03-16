@@ -1,4 +1,6 @@
 #!/bin/bash
+#This requires a TFTP folder set up on the $HOST machine that presents as a folder with all of the DRAC versions. Inside those folders, the firmimg.dX should be present.
+
 
 #Declaring some variables
 declare -a HOSTLIST
